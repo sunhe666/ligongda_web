@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>微信小游戏大全 - 游戏中</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* 等待连接遮罩 */
+    .waiting-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #0F0F23;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      color: #fff;
+      font-size: 24px;
+    }
+    .waiting-spinner {
+      width: 40px; height: 40px;
+      border: 4px solid #333;
+      border-top-color: #FFD700;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 倒计时遮罩 */
+    .countdown-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 998;
+    }
+    .countdown-text {
+      font-size: 80px;
+      font-weight: bold;
+      color: #FFD700;
+    }
+
+    /* 游戏容器 */
+    .game-page-container {
+      width: 100%;
+      height: 100vh;
+      background: #0F0F23;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 拔河HUD */
+    .game-hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 100;
+    }
+    .team-score { display: flex; align-items: center; gap: 8px; }
+    .team-label { font-size: 12px; color: #888; }
+    .team-power { font-size: 20px; font-weight: bold; color: #FFFFFF; }
+    .team-a .team-power { color: #FF6B35; }
+    .team-b .team-power { color: #4DA6FF; }
+    .time-display { font-size: 18px; font-weight: bold; color: #FFD700; }
+    .tap-hint {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      color: #FFD700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+    }
+
+    /* ===== 反应大比拼 ===== */
+    .reaction-game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+    }
+    .reaction-phase {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .reaction-signal {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding: 20px 40px;
+      border-radius: 16px;
+      transition: all 0.3s;
+    }
+    .reaction-signal.red { background: rgba(255,50,50,0.2); color: #ff4444; }
+    .reaction-signal.green { background: rgba(50,200,50,0.2); color: #4caf50; }
+    .reaction-signal.blue { background: rgba(77,166,255,0.2); color: #4DA6FF; }
+    .reaction-info {
+      display: flex;
+      justify-content: space-around;
+      width: 80%;
+      max-width: 400px;
+      margin: 0 auto;
+      font-size: 18px;
+      color: #fff;
+    }
+    .reaction-team, .reaction-round { text-align: center; }
+    .reaction-tap-btn {
+      width: 80%;
+      max-width: 300px;
+      height: 60px;
+      border: none;
+      border-radius: 30px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .reaction-tap-btn.red { background: #444; color: #888; }
+    .reaction-tap-btn.green { background: #4caf50; color: #fff; }
+    .reaction-tap-btn:active { transform: scale(0.95); }
+
+    /* ===== 数字记忆王 ===== */
+    .memory-game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100%;
+    }
+    .memory-phase { text-align: center; margin-bottom: 30px; }
+    .memory-number {
+      font-size: 64px;
+      font-weight: bold;
+      color: #FFD700;
+      background: rgba(255,215,0,0.1);
+      padding: 20px 50px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      letter-spacing: 12px;
+    }
+    .memory-info {
+      display: flex;
+      justify-content: space-around;
+      width: 80%;
+      max-width: 400px;
+      margin: 0 auto;
+      font-size: 18px;
+      color: #fff;
+    }
+    .memory-team, .memory-round { text-align: center; }
+    .memory-input-area {
+      display: flex;
+      gap: 10px;
+      width: 80%;
+      max-width: 400px;
+    }
+    .memory-input {
+      flex: 1;
+      height: 50px;
+      border: 2px solid #4DA6FF;
+      border-radius: 10px;
+      background: #1a1a3e;
+      color: #fff;
+      font-size: 24px;
+      text-align: center;
+      padding: 0 10px;
+      outline: none;
+      letter-spacing: 8px;
+    }
+    .memory-input:focus { border-color: #FFD700; }
+    .memory-input:disabled { opacity: 0.5; }
+    .memory-submit-btn {
+      height: 50px;
+      padding: 0 24px;
+      border: none;
+      border-radius: 10px;
+      background: #4DA6FF;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .memory-submit-btn:disabled { opacity: 0.5; }
+    .memory-status {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #ccc;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="gamePage" class="game-page-container">
+    <!-- 等待连接遮罩 -->
+    <div id="waitingOverlay" class="waiting-overlay">
+      <div class="waiting-spinner"></div>
+      <div>正在连接...</div>
+    </div>
+
+    <!-- 倒计时遮罩 -->
+    <div id="countdownOverlay" class="countdown-overlay">
+      <span id="countdownText" class="countdown-text">3</span>
+    </div>
+
+    <!-- 拔河HUD（默认显示） -->
+    <div id="scoreboard" class="game-hud">
+      <div class="team-score team-a">
+        <span class="team-label">🔴 A队</span>
+        <span class="team-power" id="teamAPower">0</span>
+      </div>
+      <div class="time-display" id="gameTime">30</div>
+      <div class="team-score team-b">
+        <span class="team-power" id="teamBPower">0</span>
+        <span class="team-label">B队 🔵</span>
+      </div>
+    </div>
+
+    <!-- 游戏画布（仅拔河使用） -->
+    <canvas id="gameCanvas" style="display:none;"></canvas>
+
+    <!-- 点击提示（仅拔河使用） -->
+    <div id="tapHint" class="tap-hint" style="display:none;">👆 点击屏幕助力！</div>
+
+    <!-- 通用游戏容器（反应/记忆使用） -->
+    <div id="gameContainer"></div>
+  </div>
+
+  <script src="libs/phaser.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/network.js"></script>
+  <script src="js/game-app.js"></script>
+</body>
+</html>

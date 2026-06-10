@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>微信小游戏大全 - 房间</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page-container room-page">
+    <!-- 背景 -->
+    <div class="background"></div>
+    
+    <!-- 顶部栏 -->
+    <div class="room-header">
+      <div class="room-info">
+        <div class="room-title" id="roomTitle">房间名称</div>
+        <div class="room-id" id="roomId">房间ID</div>
+        <div class="room-game-type" id="roomGameType">🤝 拔河比赛</div>
+      </div>
+      <div class="header-actions">
+        <button class="invite-btn" id="inviteBtn">📤 邀请</button>
+        <button class="leave-btn" id="leaveBtn">离开</button>
+      </div>
+    </div>
+    
+    <!-- 内容区 -->
+    <div class="room-content">
+      <!-- 两队玩家 -->
+      <div class="teams-container">
+        <!-- A队 -->
+        <div class="team-section">
+          <div class="team-header">
+            <span class="team-icon">🔴</span>
+            <span class="team-name">A队</span>
+          </div>
+          <div class="team-players" id="teamAPlayers">
+            <!-- 玩家列表 -->
+          </div>
+        </div>
+        
+        <!-- B队 -->
+        <div class="team-section">
+          <div class="team-header">
+            <span class="team-icon">🔵</span>
+            <span class="team-name">B队</span>
+          </div>
+          <div class="team-players" id="teamBPlayers">
+            <!-- 玩家列表 -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- 开始按钮 -->
+      <button class="start-btn" id="startBtn" disabled>⏰ 等待玩家...</button>
+      
+      <!-- 准备状态 -->
+      <div class="ready-section">
+        <button class="ready-btn" id="readyBtn">✅ 准备</button>
+      </div>
+    </div>
+    
+    <!-- 邀请弹窗 -->
+    <div class="modal-overlay" id="inviteModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>📤 邀请好友</h2>
+          <button class="close-btn" id="closeInviteModal">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="invite-content">
+            <p class="invite-tip">扫码加入房间</p>
+            <div class="qrcode-container">
+              <img id="qrcodeImg" src="" alt="二维码">
+              <p class="qrcode-tip">微信扫一扫</p>
+            </div>
+            <p class="invite-tip">或复制房间ID邀请好友：</p>
+            <div class="room-id-display">
+              <span id="copyRoomId">房间ID</span>
+              <button class="copy-btn" id="copyBtn">📋 复制</button>
+            </div>
+            <p class="invite-link-tip">或分享链接：</p>
+            <div class="room-link-display">
+              <input type="text" id="roomLink" class="input-field" readonly>
+              <button class="copy-btn" id="copyLinkBtn">📋 复制</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="primary-btn" id="shareBtn">🔗 分享到微信</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="js/config.js"></script>
+  <script src="js/network.js"></script>
+  <script src="js/room.js"></script>
+</body>
+</html>

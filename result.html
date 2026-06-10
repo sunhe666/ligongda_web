@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>微信小游戏大全 - 游戏结果</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page-container result-page">
+    <!-- 背景 -->
+    <div class="background"></div>
+    
+    <!-- 结果图标 -->
+    <div class="result-icon" id="resultIcon">🎉</div>
+    
+    <!-- 结果标题 -->
+    <h1 class="result-title" id="resultTitle">游戏结束</h1>
+    
+    <!-- 结果描述 -->
+    <p class="result-desc" id="resultDesc">描述文字</p>
+    
+    <!-- 分数板 -->
+    <div class="score-board">
+      <div class="score-row">
+        <span class="score-label">🔴 A队得分</span>
+        <span class="score-value" id="teamAScore">0</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">🔵 B队得分</span>
+        <span class="score-value" id="teamBScore">0</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">⏱️ 游戏时长</span>
+        <span class="score-value" id="gameDuration">30秒</span>
+      </div>
+    </div>
+    
+    <!-- 按钮 -->
+    <div class="result-buttons">
+      <button class="result-btn secondary" id="backBtn">🏠 返回首页</button>
+      <button class="result-btn primary" id="replayBtn">🔄 再来一局</button>
+    </div>
+  </div>
+  
+  <script src="js/result.js"></script>
+</body>
+</html>
