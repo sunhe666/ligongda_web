@@ -323,7 +323,7 @@
     copyRoomIdEl.textContent = roomId;
     
     // 生成房间链接（直接跳转到房间页面）
-    var roomLink = 'http://192.168.43.4:3000/room.html?roomId=' + roomId;
+    var roomLink = GameConfig.SHARE_ORIGIN + '/room.html?roomId=' + roomId;
     console.log('[DEBUG] Generated roomLink:', roomLink);
     roomLinkEl.value = roomLink;
     
@@ -362,7 +362,7 @@
 
   // 复制房间链接
   function copyRoomLink() {
-    var roomLink = 'http://192.168.43.4:3000/room.html?roomId=' + roomId;
+    var roomLink = GameConfig.SHARE_ORIGIN + '/room.html?roomId=' + roomId;
     navigator.clipboard.writeText(roomLink).then(function() {
       alert('房间链接已复制！');
     }).catch(function(err) {
@@ -391,7 +391,7 @@
 
   // 分享到微信
   function shareToWechat() {
-    var roomLink = 'http://192.168.43.4:3000/room.html?roomId=' + roomId;
+    var roomLink = GameConfig.SHARE_ORIGIN + '/room.html?roomId=' + roomId;
     var shareText = '快来一起玩拔河比赛！房间ID: ' + roomId + '\n' + roomLink;
     
     // 尝试使用 Web Share API

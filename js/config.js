@@ -1,14 +1,13 @@
 // 游戏配置 - 全局常量
-// 后端服务器地址（部署时修改为实际后端地址）
-// 本地开发: http://localhost:3000  | 生产环境: https://your-backend.railway.app
-var BACKEND_HOST = 'localhost:3000';
-var BACKEND_ORIGIN = 'http://' + BACKEND_HOST;
-var isSecure = location.protocol === 'https:';
+// 后端服务器地址：本地开发自动使用当前页面 host，部署时可通过 localStorage 覆盖
+// 设置方法: localStorage.setItem('BACKEND_HOST', 'your-server.onrender.com')
+var BACKEND_HOST = localStorage.getItem('BACKEND_HOST') || location.host;
+var isSecure = location.protocol === 'https:' || BACKEND_HOST.includes('.onrender.com');
 
 window.GameConfig = {
-  WS_URL: (isSecure ? 'wss://' : 'ws://') + location.host,
-  API_URL: location.origin + '/api',
-  SHARE_ORIGIN: location.origin,
+  WS_URL: (isSecure ? 'wss://' : 'ws://') + BACKEND_HOST,
+  API_URL: (isSecure ? 'https://' : 'http://') + BACKEND_HOST + '/api',
+  SHARE_ORIGIN: (isSecure ? 'https://' : 'http://') + BACKEND_HOST,
 
   DESIGN_WIDTH: 375,
   DESIGN_HEIGHT: 667,
